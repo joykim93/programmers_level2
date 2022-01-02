@@ -1,0 +1,42 @@
+## 문제설명
+##
+
+function solution(priorities, location) {
+    let markArr = new Array(priorities.length).fill(0)
+
+    markArr[location] = 'T'
+
+let check = ''
+let cnt = 0
+
+while(true) {
+
+    let max = Math.max(...priorities)
+    let maxIdx = priorities.indexOf(max)
+    
+    // 제일 큰 수가 첫번째 요소이고 그 수가 우리가 target한 요소이면
+    if(maxIdx === 0 && markArr[0] === 'T') {
+        cnt++
+        break;
+    } 
+    // 제일 큰 수가 첫번째 요소이지만 그 수가 우리가 target한 요소가 아니면
+    else if(maxIdx === 0) {
+        cnt++
+        priorities.shift()
+        markArr.shift()
+    } else {
+
+        let newPriorities = priorities.slice(maxIdx)
+        let newMarkArr = markArr.slice(maxIdx)
+
+        let headPriorities = priorities.slice(0, maxIdx)
+        let headMarkArr = markArr.slice(0, maxIdx)
+
+        priorities = newPriorities.concat(headPriorities)
+        markArr = newMarkArr.concat(headMarkArr)            
+    
+    }
+}
+
+    return cnt
+}
