@@ -1,0 +1,48 @@
+## 문제
+
+## 게임 맵의 상태 maps가 매개변수로 주어질 떄,
+## 상대 팀 진영에 도착하기 위해서 지나가야 하는 칸의 개수의 최솟값을
+## return 하도록 함수를 완성해주세요.
+## 단, 상대 팀 진영에 도착할 수 없을 때는 -1을 return 해주세요.
+
+## 입출력 예시
+## 1) maps = [[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,1],[0,0,0,0,1]], answer = 11
+## 2) maps = [[1,0,1,1,1],[1,0,1,0,1],[1,0,1,1,1],[1,1,1,0,0],[0,0,0,0,1]], answer = -1
+
+function solution(maps) {
+    
+    // 위, 아래, 왼쪽, 오른쪽
+    let nx = [0, 0, -1, 1]
+    let ny = [-1, 1, 0, 0]
+    
+    let n = maps.length
+    let m = maps[0].length
+    
+    let visitedCount = []
+    
+    for(let i = 0; i < n; i++) {
+        visitedCount.push(new Array(m).fill(1))
+    }
+    
+    let que = [[0, 0]]
+    
+    while(que.length > 0) {
+        
+        // current position
+        let [x, y] = que.shift()
+        
+        for(let i = 0; i < 4; i++) {
+            let nextX = x + nx[i]
+            let nextY = y + ny[i]
+            
+            if(nextX >= 0 && nextY >= 0 && nextX < n && nextY < m) {
+                if(maps[nextX][nextY] === 1 && visitedCount[nextX][nextY] === 1){
+                    visitedCount[nextX][nextY] = visitedCount[x][y] +1
+                    que.push([nextX, nextY])
+                }
+            }
+        }
+    }
+    
+    return visitedCount[n-1][m-1] === 1 ? -1 : visitedCount[n-1][m-1]
+}
