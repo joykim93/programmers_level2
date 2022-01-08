@@ -1,0 +1,48 @@
+## 문제설명
+
+## solution 함수의 매개변수로 다리에 올라갈 수 있는 트럭 수 bridge_length, 다리가 견딜 수 있는 무게 weight
+## 트럭별 무게 truck_weights가 주어집니다.
+## 이때 모든 트럭이 다리를 건너려면 최소 몇 초가 걸리는지 return
+
+## 입출력 예시
+## 1) bridge_length = 2, weight = 10, truck_weights = [7, 4, 5, 6], return = 8
+## 2) bridge_length = 100, weight = 100, truck_weights = [10], return = 101
+## 3) bridge_length = 100, weight = 100, truck_weights = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], return = 110
+
+function solution(bridge_length, weight, truck_weights) {
+    
+    let head = truck_weights.shift()
+    let step = [head]
+    let timeList = [1]
+    let time = 1
+    let sum = step.reduce((acr, cur) => acr + cur, 0)
+
+    while(truck_weights.length !== 0 || sum !== 0) {
+
+    timeList = timeList.map((el) => el + 1)
+
+    // 만약 다 건너가면 삭제해준다
+    if(timeList[0] > bridge_length) {
+        step.splice(0, 1)
+        timeList.splice(0, 1)
+    }
+
+    // step 하나씩 오면서
+    let next = 0
+    if(truck_weights) next = truck_weights[0]
+    sum = step.reduce((acr, cur) => acr + cur, 0) + next
+
+    if(sum <= weight) {       
+        // 넣어준다
+        step.push(next)
+        // 지워준다
+        truck_weights.splice(0, 1)
+        // time도 하나 넣어준다
+        timeList.push(1)
+    } 
+    sum = step.reduce((acr, cur) => acr + cur, 0)
+    time++
+    }
+
+    return time
+}
