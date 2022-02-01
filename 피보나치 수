@@ -1,0 +1,30 @@
+## 피보나치 수
+## 문제 설명
+
+## 피보나치 수는 F(0) = 0, F(1) = 1일 때, 1 이상의 n에 대하여 F(n) = F(n-1) + F(n-2) 가 적용되는 수
+## 2 이상의 n이 입력되었을 때, n번째 피보나치 수를 1234567으로 나눈 나머지를 리턴하는 함수를 작성하시오
+
+## 입출력 예시
+## 1) n = 3, return = 2
+## 2) n = 5, retunr = 5
+
+function solution(n) {
+    // n <= 2인 경우를 미리 테이블에 저장한다
+    let list = [0, 1, 1]
+    // n이 2이하인 경우, 테이블에 이미 저장된 수로 나머지를 계산하여 return
+    if(n <= 2) return list[n] % 1234567
+    
+    let cnt = 2
+    
+    while(cnt !== n) {
+        
+        let newValue = list[cnt-1] + list[cnt]
+        list.push(newValue % 1234567)
+        cnt++
+    }
+    
+    return list[n] % 1234567
+}
+
+// F(2) = F(0) + F(1)
+// F(3) = F(1) + F(2) = F(0) + F(1) + F(1)
