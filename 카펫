@@ -1,0 +1,27 @@
+## 카펫
+## 문제 설명
+
+## Leo가 본 카펫에서 갈색 격자의 수 brown, 노란색 격자의 수 yellow가 매개변수로 주어질 때 
+## 카펫의 가로, 세로 크기를 순서대로 배열에 담아 return 하도록 solution 함수를 작성하시오
+
+## 입출력 예시
+## 1) brown = 10, yellow = 2, return = [4, 3]
+## 2) brown = 8, yellow = 1, return = [3, 3]
+## 3) brown = 24, yellow = 24, return = [8, 6]
+
+function solution(brown, yellow) {
+    for(let height = 1; height <= yellow; height++) {
+        
+        let sum = 0
+        
+        // 나누어 떨어질 때만 실행
+        if(yellow % height === 0) {
+            let width = yellow / height
+            
+            sum = 2 * (height + width) + 4
+            
+            if(sum === brown) return [width + 2, height + 2]
+        }
+        
+    }
+}
