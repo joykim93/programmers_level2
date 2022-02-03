@@ -1,0 +1,44 @@
+## 다음 큰 숫자
+## 문제 설명
+
+## <조건>
+## 조건 1. n의 다음 큰 숫자는 n보다 큰 자연수 입니다
+## 조건 2. n의 다음 큰 숫자와 n은 2진수로 변환했을 때 1의 갯수가 같습니다
+## 조건 3. n의 다음 큰 숫자는 조건 1, 2를 만족하는 수 중 가장 작은 수 입니다
+## 자연수 n이 매개변수로 주어질 때, n의 다음 큰 숫자를 return 하는 solution 함수를 구현하시오
+
+## 입출력 예시
+## 1) n = 78, result = 83
+## 2) n = 15, result = 23
+
+function solution(n) {
+    // 입력값의 2진법 수
+    let nbi = Number(n).toString(2);
+    // 2진법 수의 1의 개수
+    let nbiCount = countNumOne(nbi);
+    
+    while(true){
+        // 1씩 더해주면서 찾아준다!
+        n+=1;
+        // 1씩 더해준 값을 다시 2진법 수로 변환
+        let nextbi = Number(n).toString(2);
+        // 갱신된 2진법 수의 1의 개수
+        let nextbiCount = countNumOne(nextbi) 
+        // 만약 갱신된 2진법 수의 1의 개수와 초기 2진법 수의 1의 개수가 같으면 while문 종료
+        if(nbiCount == nextbiCount){
+            break;
+        }
+    }
+    return n;
+}
+
+// 주워진 2진법수에서 1의 개수를 return
+function countNumOne (curNum) {
+        
+    let cnt = 0
+    
+    for(let i = 0; i < curNum.length; i++) {
+        if(curNum[i] === '1') cnt++
+    }
+    return cnt
+}
