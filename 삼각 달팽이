@@ -1,0 +1,87 @@
+## 삼각 달팽이
+## 문제 설명
+## 문제 URL: https://programmers.co.kr/learn/courses/30/lessons/68645
+
+## 정수 n이 매개변수로 주어집니다. 
+## 다음 그림과 같이 밑변의 길이와 높이가 n인 삼각형에서 맨 위 꼭짓점부터 반시계 방향으로 달팽이 채우기를 진행한 후, 
+## 첫 행부터 마지막 행까지 모두 순서대로 합친 새로운 배열을 return 하도록 solution 함수를 완성해주세요.
+
+## 제한사항
+## 1) n은 1 이상 1,000 이하입니다
+
+## 입출력 예시
+## 1) n = 4, result = [1,2,9,3,10,8,4,5,6,7]
+## 2) n = 5, result = [1,2,12,3,13,11,4,14,15,10,5,6,7,8,9]
+## 3) n = 6, result = [1,2,15,3,16,14,4,17,21,13,5,18,19,20,12,6,7,8,9,10,11]
+
+function solution(n) {
+    let answer = [];
+    let matrix = [];
+
+    for(let i = 0; i < n; i++) {
+        matrix.push(new Array(n).fill(0))
+    }
+
+    let row = 0
+    let col = 0
+    let value = 1
+
+    let dir = 'D'
+
+    while(true) {
+        // 현재 위치의 값이 0이면, 현재 위치의 value 값 삽입
+        if(matrix[row][col] === 0) matrix[row][col] = value;
+        // 현재 위치의 값이 0이 아니면, while문 종료
+        else if(matrix[row][col] !== 0) break;
+
+        // next position으로 이동
+        // 만약 방향이 아래쪽이면, 다음을 실행
+        if(dir === 'D') {
+            // 만약 현재 위치가 마지막 행이거나 다음 위치의 값이 0이 아니면, 방향을 오른쪽으로 바꾸고, col + 1
+            if(row === n - 1 || matrix[row+1][col] !== 0) {
+                dir = 'R';
+                col = col + 1;
+            }
+            // 이외의 경우, 방향은 유지한채로 row + 1
+            else row = row + 1;
+        }
+        // 만약 방향이 오른쪽이면, 다음을 실행
+        else if(dir === 'R') {
+            // 만약 현재 위치가 마지막 열이거나 다음 위치의 값이 0이 아니면, 방향을 좌상향으로 바꾸고, row - 1 & col - 1
+            if(col === n - 1 || matrix[row][col+1] !== 0) {
+                dir = 'LU';
+                row = row - 1;
+                col = col - 1;
+            }
+            // 이외의 경우, 방향은 유지한채로 col + 1
+            else col = col + 1;
+        }
+        // 만약 방향이 좌상향이면, 다음을 실행
+        else if(dir === 'LU') {
+            // 만약 다음 위치의 값이 0이 아니면, 방향을 아래쪽으로 바꾸고, row + 1
+            if(matrix[row-1][col-1] !== 0) {
+                dir = 'D';
+                row = row + 1;
+            }
+            // 이외의 경우, 방향은 유지한채로 row - 1 & col -1
+            else {
+              row = row - 1;
+              col = col - 1;
+            }
+        }
+
+        value++;
+    }
+
+    for(let i = 0; i < n; i ++) {
+        let j = 0; 
+        while(true) {
+            if(matrix[i][j] === 0 || j === n) break;
+            else if(matrix[i][j] !== 0) answer.push(matrix[i][j])
+
+            j++;
+        }
+    }
+
+    return answer;
+}
