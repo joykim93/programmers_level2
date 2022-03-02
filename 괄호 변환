@@ -1,0 +1,91 @@
+## 괄호 변환
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/60058
+
+## 입출력 예시
+## 1) p = "(()())()", result = "(()())()"
+## 2) p = ")(", result = "()"
+## 3) p = "()))((()", result = "()(())()"
+
+function solution(p) {
+    // 문자열 p가 빈 문자열이면, 빈 문자열('') 반환
+    if(p.length === 0) return ''
+    
+    // u가 "균형잡힌 괄호" 문자열인지 판단하는 함수
+    const isBalance = (u) => {
+        // 문자열 u에서 '(' 괄호의 개수
+        let left = u.split("").filter((el) => el === '(').length
+        // 문자열 u에서 ')' 괄호의 개수
+        let right = u.split("").filter((el) => el === ')').length
+        // 괄호의 개수가 갖다면, true 반환
+        if(left === 0 && right === 0) return false
+        else if(left === right) return true
+        else return false
+    }
+    
+    // u가 "올바른 괄호" 문자열인지 판단하는 함수
+    const isValid = (u) => {
+        
+        let stack = [];
+        
+        for(let i = 0; i < u.length; i++) {
+            if(u[i] === '(') stack.push(u[i]) 
+            else {
+                if(stack.length === 0) return false
+                else stack.pop();
+            }
+        }
+        
+        return stack.length === 0 ? true : false        
+    }
+    // 문자열 u의 괄호를 뒷집는 함수
+    const reverse = (u) => {
+        let arr= u.split("")
+        for(let i = 0; i < arr.length; i++) {
+            if(arr[i] === '(') arr[i] = ')'
+            else if(arr[i] === ')') arr[i] = '('
+        }
+        
+        u = arr.join("");
+        return u
+    }
+    
+    // 올바른 괄호를 만들기 위한 재귀함수
+    const aux = (u, v, w, idx) => {
+        debugger;
+        // 문자열 u가 균형잡힌 괄호 문자열이라면, while문 종료
+        while(!isBalance(u)) {
+            u = w.split("").splice(0, idx).join("");
+            idx++;
+        }
+        
+        v = w.split("").splice(idx - 1).join("");
+        
+        // 문자열 u가 올바른 괄호 문자열이라면
+        if(isValid(u)) {
+            // (핵심) 문자열 v가 빈 문자열이면, 문자열 u 반환
+            if(v.length === 0) return u
+            else return u + aux('', '', v, 1);
+        }
+        // 문자열 u가 올바른 괄호 문자가 아니라면
+        else {
+            let str = '(';
+            // (핵심) 문자열 v가 빈 문자열이 아닌 경우에만, v를 기준으로 다시 재귀적으로 문자열을 쪼갠다
+            if(v.length !== 0) str = str + aux('', '', v, 1);
+            str = str + ')';
+            
+            u = u.substring(1, u.length - 1);
+            u = reverse(u);
+            
+            return str + u;
+        }
+        
+        return
+    }
+
+    // 만약 문자열 p가 올바른 괄호 문자열이라면, 문자열 p를 반환    
+    if(isValid(p)) return p
+    
+    return aux('', '', p, 1)
+}
