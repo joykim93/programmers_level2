@@ -1,0 +1,61 @@
+## 방문 길이
+## 문제 설명
+
+## 문제 url: https://programmers.co.kr/learn/courses/30/lessons/49994
+
+## 제한조건
+## 1) dirs는 string형으로 주어지며, 'U', 'D', 'R', 'L' 이외에 문자는 주어지지 않습니다
+## 2) dirs의 길이는 500 이하의 자연수입니다
+
+## 입출력 예시
+## 1) dirs = "ULURRDLLU", answer = 7
+## 2) dirs = "LULLLLLLU", answer = 7
+
+function solution(dirs) {
+    let idx = 0;
+    let stack = [];
+    let x = 0;
+    let y = 0;
+
+    while(idx !== dirs.length) {
+        let nowX = x;
+        let nowY = y;
+        
+        if(dirs[idx] === 'U') {
+            if(y + 1 <= 5) {
+                y++;
+                let temp = [(x+nowX)/2, (y+nowY)/2]
+                stack.push(temp.join(""))
+            }
+        }
+        if(dirs[idx] === 'D') {
+            if(y - 1 >= -5) {
+                y--;
+                let temp = [(x+nowX)/2, (y+nowY)/2]
+                stack.push(temp.join(""))
+            }
+        }
+        if(dirs[idx] === 'R') {
+            if(x + 1 <= 5) {
+                x++;
+                let temp = [(x+nowX)/2, (y+nowY)/2]
+                stack.push(temp.join(""))
+            }
+        }
+        if(dirs[idx] === 'L') {
+            if(x - 1 >= -5) {
+                x--;
+                let temp = [(x+nowX)/2, (y+nowY)/2]
+                stack.push(temp.join(""))
+            }
+        }
+
+        idx++;
+    }
+    
+    // 배열 stack 내에 중복요소를 제거
+    let answer = stack.filter((el, idx) => {
+        return stack.indexOf(el) === idx
+    })
+    return answer.length
+}
