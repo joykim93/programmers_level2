@@ -1,0 +1,17 @@
+## 최댓값과 최솟값
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/12939
+
+## 입출력 예시
+## 1) s = "1 2 3 4"
+## 2) s = "-1 -2 -3 -4"
+## 3) s = "-1 -1"
+
+function solution(s) {
+    let arr = s.split(" ");
+    let min = Math.min(...arr)
+    let max = Math.max(...arr)
+
+    return min + ' ' + max
+}
