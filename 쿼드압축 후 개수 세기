@@ -1,0 +1,71 @@
+## 쿼드압축 후 개수 세기
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/68936
+
+## 입출력 예시
+## 1) arr = [[1,1,0,0],[1,0,0,0],[1,0,0,1],[1,1,1,1]], result = [4, 9]
+## 2) arr = [[1,1,1,1,1,1,1,1],[0,1,1,1,1,1,1,1],[0,0,0,0,1,1,1,1],[0,1,0,0,1,1,1,1],[0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1],[0,0,0,0,1,0,0,1],[0,0,0,0,1,1,1,1]], result = [10,15]
+
+function solution(arr) {
+    let zero = 0;
+    let one = 0;
+    
+    const isValid = (matrix) => {
+        let refNum = matrix[0][0];
+        
+        for(let i = 0; i < matrix.length; i++) {
+            for(let j = 0; j < matrix[0].length; j++) {
+                // matrix에 다른 값이 있다면 false 반환
+                if(refNum !== matrix[i][j]) return false
+            }
+        }
+        // matrix의 요소가 모두 값다면 true 반환
+        return true
+    }
+    
+    // 모든 원소가 단일 요소이면 다음을 실행
+    if(isValid(arr)) {
+        // 모든 원소가 1이면 [0, 1] 반환
+        if(arr[0][0] === 1) return [0, 1]
+        // 모든 원소가 0이면 [1, 0] 반환
+        else return [1, 0]
+    }
+    
+    const compress = (matrix, len) => {
+        // 현재 배열의 길이가 1이면
+        if(len === 1) {
+            if(matrix[0][0] === 1) one++;
+            else if(matrix[0][0] === 0) zero++;
+            return
+        }
+        // 현재 matrix의 요소가 단일 요소이면 다음을 실행
+        if(isValid(matrix)) {
+            // 모든 요소가 1이면 one의 값을 +1 올려준다
+            if(matrix[0][0] === 1) one++;
+            // 모든 요소가 0이면 zero의 값을 +1 올려준다
+            else if(matrix[0][0] === 0) zero++;
+            return
+        }
+        
+        let divide1 = matrix.slice(0, len/2);
+        let divide2 = matrix.slice(len/2);
+        
+        let q1 = divide1.map((el) => el.slice(0, len/2));
+        let q2 = divide1.map((el) => el.slice(len/2));
+        let q3 = divide2.map((el) => el.slice(0, len/2));
+        let q4 = divide2.map((el) => el.slice(len/2));
+        
+        // 1, 2, 3, 4사분면의 배열을 다시 압축한다
+        compress(q1, len/2);
+        compress(q2, len/2);
+        compress(q3, len/2);
+        compress(q4, len/2);
+        
+        return     
+    }
+    
+    compress(arr, arr.length)
+    
+    return [zero, one]
+}
