@@ -1,0 +1,37 @@
+## 모음 사전
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/84512
+
+## 입출력 예시
+## 1) "AAAAE", result = 6
+## 2) "AAAE", result = 10
+## 3) "I", result = 1563
+## 4) "EIO", result = 1189
+
+function solution(word) {
+    
+    let answer = [];
+    let list = ['A', 'E', 'I', 'O', 'U']
+    
+    // 만들어진 문자열을 stack에 쌓는다
+    const dfs = (list, depth, num, arr) => {
+        if(depth === num) {
+            answer.push(arr.join(""))
+            return
+        }         
+        else {
+            for(let i = 0; i < 5; i++) {
+                arr.push(list[i])
+                dfs(list, depth + 1, num, arr)
+                arr.pop()
+            }
+        }
+    }
+        
+    for(let i = 1; i <= 5; i++) {
+        dfs(list, 0, i, [])
+    }
+    
+    return answer.sort().indexOf(word) + 1
+}
