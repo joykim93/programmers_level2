@@ -1,0 +1,46 @@
+## [3차] 압축
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/17684
+
+## 입출력 예시
+## 1) msg = "KAKAO", answer = [11, 1, 27, 15]
+## 2) msg = "TOBEORNOTTOBEORTOBEORNOT", answer = [20, 15, 2, 5, 15, 18, 14, 15, 20, 27, 29, 31, 36, 30, 32, 34]
+## 3) msg = "ABABABABABABABAB", answer = [1, 2, 27, 29, 28, 31, 30]
+
+function solution(msg) {
+    
+    let answer = [];
+    // 대문자 사전을 만들어준다 ['A', 'B', 'C', ...]
+    let dic = Array.from({length: 26}, (v, i) => String.fromCharCode(i + 65));
+    
+    for(let i = 0; i < msg.length; i++) {
+        
+        let flag = true
+        
+        let now = i;
+        let idx = 0;
+        let str = msg[i];
+        
+        while(flag) {           
+            // 만약 현재 문자열이 사전에 등록되어있지 않다면
+            if(dic.indexOf(str) === -1) {
+                console.log("str2:", str)
+                // 현재 문자열을 사전에 등록한다
+                dic.push(str)
+                // while문 종료
+                flag = false
+            }
+            // 만약 현재 문자열이 사전에 등록되어있다면 해당 인덱스를 idx에 할당
+            else {
+                idx = dic.indexOf(str)
+                now++;
+                if(i+1 < now) i++;
+                str = str + msg[now]
+            }
+        }
+        answer.push(idx+1)
+    }
+    
+    return answer
+}
