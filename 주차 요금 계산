@@ -1,0 +1,79 @@
+## 주차 요금 계산
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/92341
+
+function solution(fees, records) {
+    let stack = []
+    // 자동차 번호판을 기준으로 오름차순 정렬
+    let answer = records.sort((a, b) => a.split(" ")[1] - b.split(" ")[1])
+    
+    // 차량의 주차시간 계산함수
+    const calParkingTime = (list) => {
+        let hourDiff = (list[1].split(":")[0] - list[0].split(":")[0])*60
+        let minuteDiff = list[1].split(":")[1] - list[0].split(":")[1]
+
+        return hourDiff + minuteDiff
+    }
+    
+    // 차량의 주차비용 계산함수
+    const calParkingFee = (time) => {
+        // time은 단위가 분이다
+        let basic = time - fees[0];
+        // 만약의 주차시간이 기본 시간 미만이라면, 기본 요금만 반환
+        if(basic <= 0) return fees[1]
+        // 주차비용 계산 (기본 요금 + (주차시간/단위 시간) * 단위 요금)
+        else return fees[1] + Math.ceil(basic/fees[2])*fees[3]     
+    }
+    
+    // 배열 answer의 길이가 0이면 while문 종료
+    while(answer.length !==0) {
+        // 맨 앞에 요소를 가져온다
+        let head = answer.shift();
+        // 현재 차 번호
+        let carNum = head.split(" ")[1]
+        
+        let inTime = head.split(" ")[0]
+
+        let parkingTime = 0;
+        let parkingFee = 0;
+
+        let idxList = answer.map((el, idx) => {
+            if(el.includes(carNum)) return idx
+        }).filter((el) => el !== undefined)
+        // list가 비어있다면
+        if(idxList.length === 0) {
+            parkingTime = calParkingTime([inTime, "23:59"])
+            parkingFee = calParkingFee(parkingTime)
+
+            stack.push(parkingFee)
+        }
+        else {
+            let pair = [inTime];
+            while(idxList.length !== 0) {
+
+                idxList.shift();
+
+                let head = answer.shift();
+                let time = head.split(" ")[0];
+
+                let inOrOut = head.split(" ")[2];
+
+                if(pair.length === 0 && idxList.length !== 0) pair.push(time)
+                else if(pair.length === 0) parkingTime = parkingTime + calParkingTime([time, "23:59"]);
+                else if(inOrOut === 'IN') {
+                    let inputTime = pair.shift();
+                    parkingTime = parkingTime + calParkingTime([inputTime, "23:59"]);
+                }
+                else if(inOrOut === 'OUT') {
+                    let inputTime = pair.shift();
+                    parkingTime = parkingTime + calParkingTime([inputTime, time]);
+                }
+            }
+            parkingFee = calParkingFee(parkingTime)
+            stack.push(parkingFee)
+        }
+    }
+
+    return stack
+}
