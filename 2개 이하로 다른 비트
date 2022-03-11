@@ -1,0 +1,119 @@
+## 2개 이하로 다른 비트
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/77885
+## 참고 링크: https://velog.io/@tnehd1998/%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%98%EB%A8%B8%EC%8A%A4-2%EA%B0%9C-%EC%9D%B4%ED%95%98%EB%A1%9C-%EB%8B%A4%EB%A5%B8-%EB%B9%84%ED%8A%B8-JavaScript
+
+## 입출력 예시
+## 1) numbers = [2, 7], result = [3, 11]
+
+/* 무지성 실패코드
+function solution(numbers) {
+    let answer = [];
+    
+    // 10진수를 2진수로 변환해주는 함수
+    const convert = (num) => {
+        console.log("num:", num)
+        let nowBit = [];
+        
+        let share = 0;
+            let remainder = 0;
+            // 몫이 1이 되면 while문 종료
+            while(share !== 1) {
+                // 몫
+                share = Math.floor(num / 2);
+                // 나머지
+                remainder = num % 2;
+                // 나머지를 notBit에 쌓는다
+                nowBit.unshift(remainder);
+                // 현재값 갱신
+                num = share;
+                if(share === 1) nowBit.unshift(share)
+            }
+        
+        return nowBit
+    }
+    // 비트 차이가 1-2개 다른지 확인하는 함수
+    const isValid = (now, candi) => {
+        // 배열 now와 candi의 길이차이
+        let diff = candi.length - now.length
+        let cnt = 0;
+
+        for(let i = 0; i < now.length; i++) {
+            // 비트가 다른 지점인 경우 cnt+1
+            if(now[i] !== candi[i+diff]) cnt++
+            // 다른 지점이 2개를 초과하면 false 반환
+            if(cnt + diff > 2) return false
+        }
+        // 다른 지점이 2개이하이면 true 반환
+        return cnt + diff <= 2 ? true : false
+    }
+    // 2진수에서 10진수로 재변환
+    const reconvert = (num) => {
+        let sum = 0;
+        
+        for(let i = num.length - 1; i >= 0; i--) {
+            sum = sum + num[i] * Math.pow(2, num.length - i - 1)
+        }
+        
+        return sum
+    }
+    
+    while(numbers.length !== 0) {
+        
+        // numbers 배열에 맨 앞의 요소
+        let now = numbers.shift();
+        
+        let convertedNow = 0;
+        
+        // 현재 요소가 0이면 nowBit는 0이고, 해당 요소를 answer에 삽입
+        if(now === 0) answer.push(0)
+        // 현재 요소가 0이 아니면, 현재 요소를 2진법으로 변환
+        else {
+            // 숫자 now를 2진수로 변환 [1, 0]
+            convertedNow = convert(now);
+
+            let candidate = now + 1;
+            
+            while(true) {
+                let convertedCandidate = convert(candidate);
+                // 만약 현재 candidate 숫자가 문제조건을 만족하면, 다음을 실행
+                if(isValid(convertedNow, convertedCandidate)) {
+                    // 10진수를 변환후 answer에 삽입
+                    answer.push(reconvert(convertedCandidate))
+                    // while문 종료
+                    break;                    
+                }
+                // 만약 현재 candidate 숫자가 문제조건을 만족하지 않으면, 현재 숫자에 +1로 해서 다시 while문을 돈다
+                else candidate = candidate + 1;                
+            }
+        }
+    }
+    
+    return answer;
+}
+*/
+
+function solution(numbers) {
+    let answer = [];
+    
+    while(numbers.length !== 0) {
+        let head = numbers.shift();
+        
+        if(head % 2 === 0) answer.push(head + 1);
+        else {
+            
+            let strHead = head.toString(2);
+            strHead = '0' + strHead;
+            
+            for(let i = strHead.length - 1; i >= 0; i--) {
+                if(strHead[i] === '0') {
+                  answer.push(Number(parseInt(strHead.substring(0, i) + '10' + strHead.substring(i+2), 2)))
+                  break;
+                }
+            }
+        }
+    }
+    
+    return answer;
+}
