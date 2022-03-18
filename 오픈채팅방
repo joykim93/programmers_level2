@@ -1,0 +1,29 @@
+## 오픈채팅방
+## 문제 설명
+
+## 링크 참조: https://programmers.co.kr/learn/courses/30/lessons/42888
+
+## 입출력 예시
+## 1) record = ["Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"], 
+## result = ["Prodo님이 들어왔습니다.", "Ryan님이 들어왔습니다.", "Prodo님이 나갔습니다.", "Prodo님이 들어왔습니다."]
+
+function solution(record) {
+    let answer = []
+    let obj = {}
+
+    record.map((el) => {
+        let [state, id, name] = el.split(' ');
+        if(state !== 'Leave') obj[id] = name;
+    })
+
+    record.map((el) => {
+        let [state, id] = el.split(' ');
+
+        let name = obj[id]
+        
+        if(state === 'Enter') answer.push(`${name}님이 들어왔습니다.`)
+        else if(state === 'Leave') answer.push(`${name}님이 나갔습니다.`)
+    })
+
+    return answer
+}
