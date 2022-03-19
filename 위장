@@ -1,0 +1,18 @@
+## 위장
+## 문제 url: https://programmers.co.kr/learn/courses/30/lessons/42578
+
+## 입출력 예시
+## 1) clothes = [["yellowhat", "headgear"], ["bluesunglasses", "eyewear"], ["green_turban", "headgear"]], return = 5
+## 2) clothes = [["crowmask", "face"], ["bluesunglasses", "face"], ["smoky_makeup", "face"]], return = 3
+
+function solution(clothes) {
+    let answer = 1;
+    
+    let spyWear = {}
+    // 종류별 개수를 구한다
+    for(let cloth of clothes) spyWear[cloth[1]] = (spyWear[cloth[1]] || 0) + 1
+    // 경우의 수를 구한다
+    for(let wear in spyWear) answer = answer * (spyWear[wear] + 1)
+    // 모든 것을 안입었을 경우를 제외해야하므로 -1
+    return answer - 1;
+}
